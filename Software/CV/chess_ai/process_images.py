@@ -98,6 +98,7 @@ if __name__ == "__main__":
         os.mkdir(processed_path)
     empty_board = cv2.imread(os.path.join(raw_path,'empty.jpg'))
     transform_mat = create_transform(empty_board)
+    #np.save("m.npy",transform_mat)
     for i in os.listdir(raw_path):
         if 'empty' not in i:
             img_path = os.path.join(processed_path, i.split('.')[0])

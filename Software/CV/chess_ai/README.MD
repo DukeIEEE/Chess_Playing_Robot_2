@@ -1,8 +1,8 @@
-##How to use
+## How to use
 
 Run `python process_images.py` to generate 64 60x60 squares for each chessboard image in the `../raw_data folder`.
 
-##Todo 
+## Todo
 
 * Label images in `../raw_data` denoting color of square, where there is a piece, color and type of piece.
 * Create artificial data by rotating squares, adding blur, shifting squares, etc. 
