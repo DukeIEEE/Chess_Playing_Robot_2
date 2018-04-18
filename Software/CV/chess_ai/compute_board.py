@@ -2,6 +2,7 @@ import chess
 import numpy as np
 import cv2
 import scipy.misc
+import sys
 from keras.models import load_model
 class state_tracker():
     def __init__(self,model_path,m):
