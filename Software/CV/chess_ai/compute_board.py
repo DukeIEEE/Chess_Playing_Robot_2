@@ -11,7 +11,16 @@ class state_tracker():
         self.classifier = load_model(model_path)
         self.board = chess.Board()
         self.board.push
+        self.conversion = ["A1","B1","C1","D1","E1","F1","G1","H1",
+                           "A2","B2","C2","D2","E2","F2","G2","H2",
+                           "A3","B3","C3","D3","E3","F3","G3","H3",
+                           "A4", "B4", "C4", "D4", "E4", "F4", "G4", "H4",
+                           "A5", "B5", "C5", "D5", "E5", "F5", "G5", "H5",
+                           "A6", "B6", "C6", "D6", "E6", "F6", "G6", "H6",
+                           "A7", "B7", "C7", "D7", "E7", "F7", "G7", "H7",
+                           "A8", "B8", "C8", "D8", "E8", "F8", "G8", "H8"]
         self.state = self.conv_to_state()
+        self.prev_state = self.conv_to_state()
         self.turn = chess.WHITE # white is true, black is false
         self.m = m
     def conv_to_state(self,board = None):
@@ -33,21 +42,28 @@ class state_tracker():
                 elif char.islower():
                     board_state[i,j] = 0
                     j+=1
+        board_state = np.flip(board_state, 1)
         return board_state
 
     def make_move(self,move):
         #self.board.push_san(move)
         self.board.push(move)
+        self.prev_state = self.state
         self.state = self.conv_to_state()
         self.turn = not self.turn
 
     def compute_move(self,new_state,promotion=None):
         diff = self.state-new_state
+        diff = np.rot90(diff,2,(0,1))
         print(diff)
         if self.turn == chess.WHITE:
             print(np.where(diff==2))
             from_ind = np.where(diff==2)[0][0]*8+np.where(diff==2)[1][0]
-            to_ind = np.where(diff==-2)[0][0]*8+np.where(diff==-2)[1][0]
+            try:
+                to_ind = np.where(diff==-2)[0][0]*8+np.where(diff==-2)[1][0]
+            except IndexError:
+                print("white took a piece")
+                to_ind = np.where(diff==-1)[0][0]*8+np.where(diff==-1)[1][0]
         else:
             from_ind = np.where(diff == 1)[0][0] * 8 + np.where(diff == 1)[1][0]
             to_ind = np.where(diff == -1)[0][0] * 8 + np.where(diff == -1)[1][0]
@@ -55,7 +71,7 @@ class state_tracker():
         move = chess.Move(from_ind,to_ind) #eventually introduce promotion
         return move
 
-    def compute_new_state(self, img):
+    def compute_new_state(self, img,rotate=0,flip=0):
         image = cv2.warpPerspective(img, self.m, (480, 480))
         square_size = int(image.shape[0] / 8)
         state = -1*np.ones((8,8))
@@ -67,12 +83,14 @@ class state_tracker():
                 gray = gray.astype('float32')
                 gray /= 255
                 pred = self.classifier.predict(gray.reshape(1,square_size,square_size,1))
-                print(pred)
+                #print(pred)
                 pred_value = np.argmax(pred)
                 if pred_value == 0:
                     state[i,j] = 1
                 if pred_value == 1:
                     state[i,j] = 0
+        state = np.rot90(state,rotate,(0,1))
+        state = np.flip(state,0)
         return state
 
 def main():

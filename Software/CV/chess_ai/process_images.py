@@ -6,6 +6,11 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from itertools import product
 
+def detect_chessboard(image):
+    equ = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    board_size = (7, 7)
+    found, corners = cv2.findChessboardCorners(equ, board_size, flags=cv2.CALIB_CB_ADAPTIVE_THRESH)
+    return found,equ
 
 def create_transform(image):
     #image = cv2.imread(img_path)
@@ -68,7 +73,35 @@ def create_transform(image):
     m = cv2.getPerspectiveTransform(p, q)
     # np.save('transform.npy', m)
     return m
+def get_snapshot():
+    cap = cv2.VideoCapture(1)
+    ret, frame = cap.read()
+    cap.release()
+    cv2.destroyAllWindows()
+    return frame
 
+def detect():
+    cap = cv2.VideoCapture(1)
+    found = False
+    image = None
+    while (not found):
+        # Capture frame-by-frame
+        ret, frame = cap.read()
+        found, gray = detect_chessboard(frame)
+        # Our operations on the frame come here
+        #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        if found:
+            image = frame
+        # Display the resulting frame
+        cv2.imshow('frame', gray)
+        #print(found)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+    print("found")
+    m = create_transform(image)
+    return m,image
 
 def split_board(image,img_path):
     #image = cv2.imread('transformed_board.jpg')
@@ -96,14 +129,15 @@ if __name__ == "__main__":
     assert os.path.exists(raw_path), 'No raw data or raw data in wrong directory'
     if not os.path.exists(processed_path):
         os.mkdir(processed_path)
-    empty_board = cv2.imread(os.path.join(raw_path,'empty.jpg'))
+    #empty_board = cv2.imread(os.path.join(raw_path,'empty.jpg'))
+    empty_board = cv2.imread('test.jpg')
     transform_mat = create_transform(empty_board)
     #np.save("m.npy",transform_mat)
-    for i in os.listdir(raw_path):
-        if 'empty' not in i:
-            img_path = os.path.join(processed_path, i.split('.')[0])
-            if not os.path.exists(img_path):
-                os.mkdir(img_path)
-            chess_board = cv2.imread(os.path.join(raw_path, i))
-            chess_board = transform_board(transform_mat,chess_board)
-            split_board(chess_board, img_path)
+    # for i in os.listdir(raw_path):
+    #     if 'empty' not in i:
+    #         img_path = os.path.join(processed_path, i.split('.')[0])
+    #         if not os.path.exists(img_path):
+    #             os.mkdir(img_path)
+    #         chess_board = cv2.imread(os.path.join(raw_path, i))
+    #         chess_board = transform_board(transform_mat,chess_board)
+    #         split_board(chess_board, img_path)
