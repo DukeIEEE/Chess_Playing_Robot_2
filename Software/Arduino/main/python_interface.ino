@@ -3,11 +3,11 @@ boolean moveMade() {
 }
 
 void computerTurn() {
-  Serial.write("Player Made Move");
+
 }
 
 void playerTurn() {
-  
+
 }
 
 void receiveCommand() {
