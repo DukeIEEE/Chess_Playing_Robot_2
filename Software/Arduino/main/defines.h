@@ -28,13 +28,15 @@
 
 
 enum PIECE_TYPE {
-    KING_T = 0,
-    QUEEN_T = 1,
-    ROOK_T = 2,
-    BISHOP_T = 3,
-    KNIGHT_T = 4,
-    PAWN_T = 5
+    K = 0,
+    Q = 1,
+    R = 2,
+    T = 3, //Bishop
+    N = 4,
+    P = 5
 };
+
+int PIECE_array[] = {K, Q, R, T, N, P};
 
 enum PIECE_HEIGHTS {
     K_H = 500,
@@ -59,6 +61,8 @@ enum Y_POSITIONS {
     H = G + sqy,
 };
 
+int Y_array[] = {0, A, B, C, D, E, F, G ,H};
+
 enum X_POSITIONS {
     ONE = 260,
     TWO = ONE     + sqx,
@@ -69,6 +73,9 @@ enum X_POSITIONS {
     SEVEN = SIX   + sqx,
     EIGHT = SEVEN + sqx,
 };
+
+//int X_array[] = {0, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN ,EIGHT};
+int X_array[] = {0, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO,ONE};
 
 int captured_x = 220;
 int captured_y = 100;

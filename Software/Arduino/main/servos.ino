@@ -1,11 +1,47 @@
 void move() {
-  int x_start = received_command[0];
-  int y_start = received_command[1];
-  int piece_type = received_command[2];
-  int x_end = received_command[3];
-  int y_end = received_command[4];
-  int piece_captured = received_command[5];
-  int captured_type = received_command[6];
+//  char x_start_c = received_command[0];
+//  char y_start_c = received_command[1];
+//  char piece_type_c = received_command[2];
+//  char x_end_c = received_command[3];
+//  char y_end_c = received_command[4];
+//  char piece_captured_c = received_command[5];
+//  char captured_type_c = received_command[6];
+
+  char x_start_c = command.charAt(0);
+  char y_start_c = command.charAt(1);
+  char piece_type_c = command.charAt(2);
+  char x_end_c = command.charAt(3);
+  char y_end_c = command.charAt(4);
+  char piece_captured_c = command.charAt(5);
+  char captured_type_c = command.charAt(6);
+
+  int x_start;
+  int y_start;
+  int piece_type;
+  int x_end;
+  int y_end;
+  int piece_captured;
+  int captured_type;
+
+  x_start = X_array[x_start_c - '0'];
+  y_start = Y_array[(int)y_start_c - 64];
+
+//  for (int k = 0; k < (x_start_c - '0'); k++) {
+//    digitalWrite(LED, HIGH);
+//    delay(200);
+//    digitalWrite(LED, LOW);
+//    delay(200);
+//  }
+
+//  for (int k = 0; k < (y_start_c - 64); k++) {
+//    digitalWrite(LED, HIGH);
+//    delay(200);
+//    digitalWrite(LED, LOW);
+//    delay(200);
+//  }
+
+  x_end = X_array[x_end_c - '0'];
+  y_end = Y_array[(int)y_end_c - 64];
 
   //if piece_captured == 1:
   
@@ -34,7 +70,7 @@ void move() {
   //activate_electromagnet(false);
   //move z by -piece_type
   move_x(-x_end);//move x and y by -x_end and -y_end
-   move_x(-y_end);
+   move_y(-y_end);
 }
 
 void activate_electromagnet(boolean on) {

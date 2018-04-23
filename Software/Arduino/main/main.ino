@@ -1,12 +1,13 @@
 #include "defines.h"
 
-int LED = 4;      // LED connected to digital pin 4
+int LED = 43;      // LED connected to digital pin 4
 int electromagnet = 32;
 int button = 45;
-int x;
-int i = 0;
 int start;
-int received_command[10]; //
+int i = 0;
+int j;
+char received_command[7]; //
+String command;
 boolean player_turn;
 
 void setup() {
@@ -43,7 +44,6 @@ void setup() {
 
   //move_x(5000);
   start = millis();
-
 }
 
 void loop() {
