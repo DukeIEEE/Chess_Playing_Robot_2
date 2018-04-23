@@ -11,6 +11,7 @@ class state_tracker():
         self.classifier = load_model(model_path)
         self.board = chess.Board()
         self.board.push
+        self.numbers = ["ZERO","ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE"]
         self.conversion = ["A1","B1","C1","D1","E1","F1","G1","H1",
                            "A2","B2","C2","D2","E2","F2","G2","H2",
                            "A3","B3","C3","D3","E3","F3","G3","H3",
@@ -42,28 +43,38 @@ class state_tracker():
                 elif char.islower():
                     board_state[i,j] = 0
                     j+=1
-        board_state = np.flip(board_state, 1)
+        board_state = np.flip(board_state, 1) #fen string starts with black side, need to flip to have array index match chess notation
         return board_state
 
     def make_move(self,move):
-        #self.board.push_san(move)
         self.board.push(move)
         self.prev_state = self.state
         self.state = self.conv_to_state()
         self.turn = not self.turn
 
-    def compute_move(self,new_state,promotion=None):
+    def compute_move(self,new_state,promotion=None): #only checks for white propertly
         diff = self.state-new_state
         diff = np.rot90(diff,2,(0,1))
         print(diff)
         if self.turn == chess.WHITE:
-            print(np.where(diff==2))
-            from_ind = np.where(diff==2)[0][0]*8+np.where(diff==2)[1][0]
-            try:
-                to_ind = np.where(diff==-2)[0][0]*8+np.where(diff==-2)[1][0]
-            except IndexError:
-                print("white took a piece")
-                to_ind = np.where(diff==-1)[0][0]*8+np.where(diff==-1)[1][0]
+            #check castling
+            if len(np.where(diff==2)[0])==2:
+                assert np.where(diff=2[0][0]) == 0
+                if diff[0][0] == 2:
+                    from_ind = 4
+                    to_ind = 2
+                elif diff[0][7] == 2:
+                    from_ind = 4
+                    to_ind = 6
+                else:
+                    assert False
+            else:
+                from_ind = np.where(diff==2)[0][0]*8+np.where(diff==2)[1][0]
+                try:
+                    to_ind = np.where(diff==-2)[0][0]*8+np.where(diff==-2)[1][0]
+                except IndexError:
+                    print("white took a piece")
+                    to_ind = np.where(diff==-1)[0][0]*8+np.where(diff==-1)[1][0]
         else:
             from_ind = np.where(diff == 1)[0][0] * 8 + np.where(diff == 1)[1][0]
             to_ind = np.where(diff == -1)[0][0] * 8 + np.where(diff == -1)[1][0]
@@ -90,7 +101,8 @@ class state_tracker():
                 if pred_value == 1:
                     state[i,j] = 0
         state = np.rot90(state,rotate,(0,1))
-        state = np.flip(state,0)
+        if flip:
+            state = np.flip(state,0)
         return state
 
 def main():
