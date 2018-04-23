@@ -34,7 +34,7 @@ void move() {
   //activate_electromagnet(false);
   //move z by -piece_type
   move_x(-x_end);//move x and y by -x_end and -y_end
-  move_x(-y_end);
+   move_x(-y_end);
 }
 
 void activate_electromagnet(boolean on) {
