@@ -11,7 +11,7 @@ class state_tracker():
         self.classifier = load_model(model_path)
         self.board = chess.Board()
         self.board.push
-        self.numbers = ["ZERO","ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE"]
+        self.piece_number = ["K","Q","R","B","N","P"]
         self.conversion = ["A1","B1","C1","D1","E1","F1","G1","H1",
                            "A2","B2","C2","D2","E2","F2","G2","H2",
                            "A3","B3","C3","D3","E3","F3","G3","H3",

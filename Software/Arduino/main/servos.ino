@@ -26,13 +26,13 @@ void move() {
   x_start = X_array[x_start_c - '0'];
   y_start = Y_array[(int)y_start_c - 64];
 
-//  for (int k = 0; k < (x_start_c - '0'); k++) {
-//    digitalWrite(LED, HIGH);
-//    delay(200);
-//    digitalWrite(LED, LOW);
-//    delay(200);
-//  }
-
+  for (int k = 0; k < command.length() ; k++) {
+    digitalWrite(LED, HIGH);
+    delay(200);
+    digitalWrite(LED, LOW);
+    delay(200);
+  }
+  command = "";
 //  for (int k = 0; k < (y_start_c - 64); k++) {
 //    digitalWrite(LED, HIGH);
 //    delay(200);
@@ -59,13 +59,13 @@ void move() {
   
   move_x(x_start); //move x and y by x_start and y_start
   move_y(y_start);
-  delay(3000);
+  delay(1000);
   //move z by piece_type
   //activate_electromagnet(true);
   //move z by -piece_type
   move_x(x_end - x_start); //move x and y by (x_end-x_start) and (y_end-y_start)
   move_y(y_end - y_start);
-  delay(3000);
+  delay(1000);
   //move z by piece_type
   //activate_electromagnet(false);
   //move z by -piece_type

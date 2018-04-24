@@ -18,10 +18,10 @@ import sys
 # cv2.imshow("image",t_img)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
-qm = np.load("m.npy")
+m = np.load("m.npy")
 state_tracker = state_tracker("cnn.h5",m)
 img = get_snapshot() #gets current image of board
-new_state = state_tracker.compute_new_state(img,rotate=0,flip=1) #Need to change depending on orientation
+new_state = state_tracker.compute_new_state(img,rotate=1,flip=1) #Need to change depending on orientation
 
 print(new_state)
 print(state_tracker.conv_to_state(state_tracker.board))
@@ -29,11 +29,13 @@ np.testing.assert_array_equal(new_state,state_tracker.conv_to_state(state_tracke
 engine = chess.uci.popen_engine("stockfish_8_x64.exe")
 engine.uci()
 print(engine.name)
+
+ser = serial.Serial("COM3", 9600)
 while(not state_tracker.board.is_checkmate()):
     #wait for button press
     move = input("Press Enter to continue...")
     img = get_snapshot()
-    new_state = state_tracker.compute_new_state(img,rotate=0,flip=1) #Need to change depending on orientation
+    new_state = state_tracker.compute_new_state(img,rotate=1,flip=1) #Need to change depending on orientation
     print("current state")
     print(state_tracker.state)
     print("computed state")
@@ -49,18 +51,22 @@ while(not state_tracker.board.is_checkmate()):
     print("Stock Makes Move:")
     print(bestmove.uci())
     y_start = bestmove.uci()[0].upper()
-    x_start = state_tracker.numbers[int(bestmove.uci()[1])]
-    piece_start = state_tracker.board.piece_at(state_tracker.conversion.index("" + y_start + x_start))
-    piece_type = piece_start.symbol() + "_H"
+    x_start = str(int(bestmove.uci()[1]))
+    piece_start = str(state_tracker.piece_number.index(state_tracker.board.piece_at(state_tracker.conversion.index("" + y_start + x_start)).symbol().upper()))
     y_end = bestmove.uci()[2].upper()
-    x_end = state_tracker.numbers[int(bestmove.uci()[3])]
-    piece_end = state_tracker.board.piece_at(state_tracker.conversion.index(""+y_end+x_end))
+    x_end = str(bestmove.uci()[3])
+    print()
+    piece_end = state_tracker.board.piece_at(state_tracker.conversion.index("" + y_end + x_end))
     if None != piece_end:
-        piece_captured = 1
-        piece = piece_end.symbol() + "_H"
+        piece_captured = "1"
+        captured_type = str(state_tracker.piece_number.index(piece_end.symbol().upper()))
     else:
-        piece_captured = 0
+        piece_captured = "0"
         captured_type = "0"
+    send_arr = x_start+y_start+piece_start+x_end+y_end+piece_captured+captured_type
+    print(send_arr)
+    ser.write(str.encode(send_arr,"ascii"))
+
     #output bestmove to arduino
     state_tracker.make_move(bestmove)
     print(state_tracker.state)
