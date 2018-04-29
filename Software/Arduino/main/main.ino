@@ -11,6 +11,7 @@ String command;
 boolean player_turn;
 
 void setup() {
+
   pinMode(X_STEP_PIN  , OUTPUT);
   pinMode(X_DIR_PIN    , OUTPUT);
   pinMode(X_ENABLE_PIN    , OUTPUT);
@@ -45,6 +46,11 @@ void setup() {
   //move_x(5000);
   start = millis();
 }
+
+void software_Reset() // Restarts program from beginning but does not reset the peripherals and registers
+{
+asm volatile ("  jmp 0");  
+}  
 
 void loop() {
   //if (player_turn && moveMade()) { //Wait for physical button press

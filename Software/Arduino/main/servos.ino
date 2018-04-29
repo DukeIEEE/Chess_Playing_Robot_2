@@ -71,6 +71,8 @@ void move() {
   //move z by -piece_type
   move_x(-x_end);//move x and y by -x_end and -y_end
    move_y(-y_end);
+
+   software_Reset();
 }
 
 void activate_electromagnet(boolean on) {
@@ -82,6 +84,7 @@ void activate_electromagnet(boolean on) {
 }
 
 void move_x(int amount) {
+      delay(10);
   digitalWrite(X_ENABLE_PIN    , LOW);
   digitalWrite(Y_ENABLE_PIN    , LOW);
 
@@ -99,9 +102,11 @@ void move_x(int amount) {
 
   digitalWrite(X_ENABLE_PIN    , HIGH);
   digitalWrite(Y_ENABLE_PIN    , HIGH);
+      delay(10);
 }
 
 void move_y(int amount) {
+    delay(10);
   digitalWrite(E_ENABLE_PIN    , LOW);
   digitalWrite(Q_ENABLE_PIN    , LOW);
 
@@ -119,10 +124,11 @@ void move_y(int amount) {
 
   digitalWrite(E_ENABLE_PIN    , HIGH);
   digitalWrite(Q_ENABLE_PIN    , HIGH);
+      delay(10);
 }
 
 void move_z(int amount) {
-  delay(50);
+  delay(10);
   digitalWrite(Z_ENABLE_PIN    , LOW);
 
   int start = millis();
@@ -135,7 +141,7 @@ void move_z(int amount) {
     move_help();
   }
   digitalWrite(Z_ENABLE_PIN    , HIGH);
-  delay(50);
+  delay(10);
 }
 
 void move_help() {
