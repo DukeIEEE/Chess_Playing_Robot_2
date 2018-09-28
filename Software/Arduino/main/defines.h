@@ -27,25 +27,25 @@
 
 
 
-enum PIECE_TYPE {
-    K = 0,
-    Q = 1,
-    R = 2,
-    T = 3, //Bishop
-    N = 4,
-    P = 5
-};
-
-int PIECE_array[] = {K, Q, R, T, N, P};
+//enum PIECE_TYPE {
+//    K = 0,
+//    Q = 1,
+//    R = 2,
+//    T = 3, //Bishop
+//    N = 4, 
+//    P = 5
+//};
 
 enum PIECE_HEIGHTS {
-    K_H = 500,
-    Q_H = 500,
-    R_H = 500,
-    B_H = 500,
-    N_H = 500,
-    P_H = 2800
+    K_H = 500, //king
+    Q_H = 500, //queen
+    R_H = 500, //rook
+    T_H = 500, //bishop
+    N_H = 500, //knight
+    P_H = 500 //pawn //2800
 };
+
+int PIECE_array[] = {K_H, Q_H, R_H, T_H, N_H, P_H};
 
 const int sqy = 330;
 const int sqx = 260;

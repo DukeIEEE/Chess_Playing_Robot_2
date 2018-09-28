@@ -17,7 +17,7 @@ void move() {
 
   int x_start;
   int y_start;
-  int piece_type;
+  int piece_height;
   int x_end;
   int y_end;
   int piece_captured;
@@ -25,13 +25,16 @@ void move() {
 
   x_start = X_array[x_start_c - '0'];
   y_start = Y_array[(int)y_start_c - 64];
+  piece_height = PIECE_array[piece_type_c - '0'];
+  x_end = X_array[x_end_c - '0'];
+  y_end = Y_array[(int)y_end_c - 64];
 
-  for (int k = 0; k < command.length() ; k++) {
-    digitalWrite(LED, HIGH);
-    delay(200);
-    digitalWrite(LED, LOW);
-    delay(200);
-  }
+//  for (int k = 0; k < command.length() ; k++) {
+//    digitalWrite(LED, HIGH);
+//    delay(200);
+//    digitalWrite(LED, LOW);
+//    delay(200);
+//  }
   command = "";
 //  for (int k = 0; k < (y_start_c - 64); k++) {
 //    digitalWrite(LED, HIGH);
@@ -39,9 +42,6 @@ void move() {
 //    digitalWrite(LED, LOW);
 //    delay(200);
 //  }
-
-  x_end = X_array[x_end_c - '0'];
-  y_end = Y_array[(int)y_end_c - 64];
 
   //if piece_captured == 1:
   
@@ -60,17 +60,17 @@ void move() {
   move_x(x_start); //move x and y by x_start and y_start
   move_y(y_start);
   delay(1000);
-  //move z by piece_type
-  //activate_electromagnet(true);
-  //move z by -piece_type
+  move_z(piece_height);//move z by piece_type
+  activate_electromagnet(true);
+  move_z(-piece_height); //move z by -piece_type
   move_x(x_end - x_start); //move x and y by (x_end-x_start) and (y_end-y_start)
   move_y(y_end - y_start);
   delay(1000);
-  //move z by piece_type
-  //activate_electromagnet(false);
-  //move z by -piece_type
+  move_z(piece_height);//move z by piece_type
+  activate_electromagnet(false);
+  move_z(-piece_height);//move z by -piece_type
   move_x(-x_end);//move x and y by -x_end and -y_end
-   move_y(-y_end);
+  move_y(-y_end);
 
    software_Reset();
 }
