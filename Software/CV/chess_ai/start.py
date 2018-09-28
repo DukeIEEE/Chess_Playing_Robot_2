@@ -11,13 +11,15 @@ import sys
 
 #Assume player is white
 
-# m,img = detect()
-# np.save("m.npy",m)
+# m, img = detect()
+# np.save("m.npy", m)
 # print("chessboard detected")
-# t_img = transform_board(m,img)
-# cv2.imshow("image",t_img)
+# t_img = transform_board(m, img)
+# cv2.imshow("image", t_img)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
+
+###
 m = np.load("m.npy")
 state_tracker = state_tracker("cnn.h5",m)
 img = get_snapshot() #gets current image of board
@@ -66,7 +68,8 @@ while(not state_tracker.board.is_checkmate()):
     send_arr = x_start+y_start+piece_start+x_end+y_end+piece_captured+captured_type
     print(send_arr)
     ser.write(str.encode(send_arr,"ascii"))
-
+    res = ser.read(size=7)
+    print("arduino sent back "+ res.decode())
     #output bestmove to arduino
     state_tracker.make_move(bestmove)
     print(state_tracker.state)

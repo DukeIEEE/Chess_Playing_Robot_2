@@ -4,6 +4,8 @@ import cv2
 import scipy.misc
 import sys
 from keras.models import load_model
+
+
 class state_tracker():
     def __init__(self,model_path,m):
         # [1,0,0] is white, [0,1,0] is black, [0,0,1] is empty in pred
@@ -55,11 +57,12 @@ class state_tracker():
     def compute_move(self,new_state,promotion=None): #only checks for white propertly
         diff = self.state-new_state
         diff = np.rot90(diff,2,(0,1))
+        print("this is diff")
         print(diff)
         if self.turn == chess.WHITE:
             #check castling
             if len(np.where(diff==2)[0])==2:
-                assert np.where(diff=2[0][0]) == 0
+                assert np.where(diff[0][0]==2) == 0
                 if diff[0][0] == 2:
                     from_ind = 4
                     to_ind = 2
